@@ -25,7 +25,8 @@ class Ticket extends Model
     public function closed_by($closed_by)
     {
         $user = User::find($closed_by);
-        return $user->name;
+        return $user ? $user->name : null;
+
     }
 
     public function uploadDoc()
