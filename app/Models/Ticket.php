@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
+
 
 class Ticket extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'nomor_tiket',
         'tanggal',
         'judul',
         'deskripsi',
@@ -22,10 +25,10 @@ class Ticket extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function closed_by($closed_by)
+    public function findUser($id)
     {
-        $user = User::find($closed_by);
-        return $user ? $user->name : null;
+        $user = User::find($id);
+        return $user ? ucfirst($user->name) . ' - ('. $user->getRoleNames()[0] .')': null;
 
     }
 

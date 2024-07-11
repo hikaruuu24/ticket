@@ -67,15 +67,15 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
-                        <label for="status">Status <small>(readonly)</small></label>
-                        <select name="status" class="form-control @error('status') is-invalid @enderror" id=""
-                            {{($ticket->status != null && auth()->user()->getRoleNames()[0] != 'Admin') ? 'disabled="true"' : ''}}>
-                            <option value="open" {{($ticket->status == 'open') ? 'selected' : ''}}>Open</option>
+                        <label for="status" class="fw-bold">Status</label>
+                        <select name="status" class="form-control @error('status') is-invalid @enderror" id="">
+                            @if (auth()->user()->getRoleNames()[0] == 'Admin')
+                                <option value="open" {{($ticket->status == 'open') ? 'selected' : ''}}>Open</option>
+                            @endif
+                            <option value="progress" {{($ticket->status == 'progress') ? 'selected' : ''}}>Progress
                             <option value="pending" {{($ticket->status == 'pending') ? 'selected' : ''}}>Pending
                             </option>
-                            @if (auth()->user()->getRoleNames()[0] == 'Admin')
                             <option value="close" {{($ticket->status == 'close') ? 'selected' : ''}}>Closed</option>
-                            @endif
                         </select>
                         @error('status')
                         <span class="invalid-feedback" role="alert">

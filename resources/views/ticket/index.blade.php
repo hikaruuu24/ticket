@@ -10,10 +10,12 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
+                        @include('components.flash-message')
                         <table id="example3" class="display" style="min-width: 845px">
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Nomor Tiket</th>
                                     <th>Tanggal</th>
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
@@ -28,10 +30,11 @@
                                 @foreach ($tickets as $ticket)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
+                                    <td>{{$ticket->nomor_tiket}}</td>
                                     <td>{{$ticket->created_at}}</td>
                                     <td>{{$ticket->judul}}</td>
                                     <td>{{$ticket->deskripsi}}</td>
-                                    <td>{{$ticket->user->name}}</td>
+                                    <td>{{ucfirst($ticket->user->name) . ' - ('. $ticket->user->getRoleNames()[0] .')'}}</td>
                                     {{-- <td>
                                         @if ($ticket->status == 'open')
                                             <span style="font-size: 12px;" class="badge badge-success">{{$ticket->status}}</span>
@@ -44,10 +47,12 @@
                                     <td>
                                         @if ($ticket->status == 'open')
                                             <i class="fa fa-circle text-success me-1"></i>Open
+                                        @elseif ($ticket->status == 'progress')
+                                            <i class="fa fa-circle text-primary me-1"></i>Progress by {{$ticket->findUser($ticket->progress_by)}}
                                         @elseif ($ticket->status == 'pending')
                                             <i class="fa fa-circle text-warning me-1"></i>Pending
                                         @else
-                                            <i class="fa fa-circle text-danger me-1"></i>Closed by {{$ticket->closed_by($ticket->closed_by)}}
+                                            <i class="fa fa-circle text-danger me-1"></i>Closed by {{$ticket->findUser($ticket->closed_by)}}
                                         @endif
                                     </td>
                                     <td>{{$ticket->updated_at}}</td>

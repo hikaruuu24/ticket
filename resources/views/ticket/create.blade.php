@@ -78,8 +78,8 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer bg-gray1" style="border-radius:0px 0px 10px 10px;">
-                    <button type="submit" class="btn btn-success btn-footer">Add</button>
-                    <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-footer">Back</a>
+                    <button type="submit" class="btn btn-success btn-footer">Simpan</button>
+                    <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-footer">Kembali</a>
                 </div>
             </form>
         </div>

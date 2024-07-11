@@ -6,6 +6,8 @@ use App\Models\Ticket;
 use App\Models\UploadDocTicket;
 use App\Models\UploadDocTrouble;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class TicketController extends Controller
 {
@@ -40,8 +42,15 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+
+        $loggedUser = auth()->user()->name;
+        
+
         try {
+            DB::beginTransaction();
+
             Ticket::create([
+                'nomor_tiket' => $this->generateNumberTicket($loggedUser),
                 'tanggal' => $request->tanggal,
                 'judul' => $request->judul,
                 'deskripsi' => $request->deskripsi,
@@ -65,9 +74,12 @@ class TicketController extends Controller
 
             }
 
-            return redirect()->route('tickets.index')->with('success', 'Ticket created successfully');
+            DB::commit(); 
+
+            return redirect()->route('tickets.index')->with('success', 'Tiket berhasil dibuat');
         } catch (\Throwable $th) {
-            return redirect()->route('tickets.index')->with('error', 'Ticket failed to create');
+            DB::rollBack();
+            return redirect()->route('tickets.index')->with('error', 'Tiket gagal dibuat');
         }
     }
 
@@ -120,9 +132,9 @@ class TicketController extends Controller
                 'status' => $request->status,
                 'user_id' => auth()->user()->id
             ]);
-            return redirect()->route('tickets.index')->with('success', 'Ticket updated successfully');
+            return redirect()->route('tickets.index')->with('success', 'Tiket berhasil diubah');
         } catch (\Throwable $th) {
-            return redirect()->route('tickets.index')->with('error', 'Ticket failed to update');
+            return redirect()->route('tickets.index')->with('error', 'Tiket berhasil diubah');
         }
     }
 
@@ -136,9 +148,9 @@ class TicketController extends Controller
     {
         try {
             $ticket->delete();
-            return redirect()->route('tickets.index')->with('success', 'Ticket deleted successfully');
+            return redirect()->route('tickets.index')->with('success', 'Tiket berhasil dihapus');
         } catch (\Throwable $th) {
-            return redirect()->route('tickets.index')->with('error', 'Ticket failed to delete');
+            return redirect()->route('tickets.index')->with('error', 'Tiket gagal dihapus');
         }
     }
 
@@ -184,7 +196,7 @@ class TicketController extends Controller
                 $upload->delete();
             }
 
-            return redirect()->route('tickets.update-ticket', $id)->with('success', 'Document deleted successfully');
+            return redirect()->route('tickets.update-ticket', $id)->with('success', 'Dokumen berhasil dihapus');
         } catch (\Throwable $th) {
         }
     }
@@ -231,7 +243,7 @@ class TicketController extends Controller
                 $upload->delete();
             }
 
-            return redirect()->route('tickets.update-ticket', $id)->with('success', 'Document deleted successfully');
+            return redirect()->route('tickets.update-ticket', $id)->with('success', 'Dokumen berhasil dihapus');
         } catch (\Throwable $th) {
         }
     }
@@ -240,13 +252,24 @@ class TicketController extends Controller
     {
         try {
             $ticket = Ticket::find($id);
-            $ticket->status = 'close';
+            $ticket->status = $request->status;
+            $ticket->progress_by = $request->closed_by;
             $ticket->closed_by = $request->closed_by;
             $ticket->save();
 
-            return redirect()->route('tickets.index')->with('success', 'Status updated successfully');
+            return redirect()->route('tickets.index')->with('success', 'Status berhasil diubah');
         } catch (\Throwable $th) {
-            return redirect()->route('tickets.index')->with('error', 'Status failed to update');
+            return redirect()->route('tickets.index')->with('error', 'Status berhasil diubah');
         }
     }
+
+    public function generateNumberTicket($loggedUser)
+    {
+        $ticketCount = Ticket::count();
+        $date = date('Ymd');
+        $numDigits = max(4, strlen((string)($ticketCount + 1))); // Ensures at least 4 digits
+        $nomor = 'TICKET-' . str_pad($ticketCount + 1, $numDigits, '0', STR_PAD_LEFT) . '-' . strtoupper($loggedUser) . '-' . $date;
+        return $nomor;
+    }
+
 }
