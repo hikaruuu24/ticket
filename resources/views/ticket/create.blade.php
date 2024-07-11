@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('style')
+@push('style')
 
-@endsection
+@endpush
 
 @section('content')
 <div class="row mt-4">
@@ -56,6 +56,10 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3">
+                        <label for="upload_docs">Upload Dokumen</label>
+                        <input type="file" name="docs[]" id="docs" class="form-control" multiple>
+                    </div>
+                    <div class="form-group mb-3">
                         <label for="status">Status</label>
                         <select name="status" class="form-control @error('status') is-invalid @enderror" id="">
                             <option value="open">Open</option>
@@ -83,6 +87,6 @@
 </div>
 @endsection
 
-@section('script')
+@push('script')
 
-@endsection
+@endpush

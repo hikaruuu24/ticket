@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\UploadDocTicket;
+use App\Models\UploadDocTrouble;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -16,7 +17,7 @@ class TicketController extends Controller
     public function index()
     {
         $data['page_title'] = 'Ticket';
-        $data['tickets'] = Ticket::all();
+        $data['tickets'] = Ticket::orderBy('created_at', 'desc')->get();
         return view('ticket.index', $data);
     }
 
@@ -47,6 +48,23 @@ class TicketController extends Controller
                 'status' => $request->status,
                 'user_id' => auth()->user()->id
             ]);
+
+            $ticket = Ticket::orderBy('created_at', 'desc')->first();
+            // save doc multiple
+            if ($request->hasFile('docs')) {
+                foreach ($request->file('docs') as $file) {
+                    $name = $file->getClientOriginalName();
+                    $file->move(public_path() . '/doc_troubles/', $name);
+
+                    $upload = new UploadDocTrouble();
+                    $upload->ticket_id = $ticket->id;
+                    $upload->user_id = $ticket->user_id;
+                    $upload->file_upload = $name;
+                    $upload->save();
+                }
+
+            }
+
             return redirect()->route('tickets.index')->with('success', 'Ticket created successfully');
         } catch (\Throwable $th) {
             return redirect()->route('tickets.index')->with('error', 'Ticket failed to create');
@@ -153,21 +171,78 @@ class TicketController extends Controller
     {
         try {
             $upload = UploadDocTicket::where('ticket_id', $id)->where('file_upload', $doc)->first();
-            $upload->delete();
+            if ($upload) {
+                // Build the full path to the file
+                $filePath = public_path('docs/' . $upload->file_upload);
+                
+                // Check if the file exists and delete it
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+    
+                // Delete the record from the database
+                $upload->delete();
+            }
 
             return redirect()->route('tickets.update-ticket', $id)->with('success', 'Document deleted successfully');
         } catch (\Throwable $th) {
         }
     }
 
-    public function updateStatus($id)
+    public function uploadDocTrouble(Request $request, $id)
+    {
+        try {
+            // save doc multiple
+            if ($request->hasFile('docs')) {
+                foreach ($request->file('docs') as $file) {
+                    $name = $file->getClientOriginalName();
+                    $file->move(public_path() . '/doc_troubles/', $name);
+
+                    $upload = new UploadDocTrouble();
+                    $upload->ticket_id = $id;
+                    $upload->user_id = auth()->user()->id;
+                    $upload->file_upload = $name;
+                    $upload->save();
+                }
+
+            }
+            
+            return response()->json(['message' => 'Upload success']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()]);
+        }
+
+    }
+
+    public function deleteDocTrouble($id, $doc)
+    {
+        try {
+            $upload = UploadDocTrouble::where('ticket_id', $id)->where('file_upload', $doc)->first();
+            if ($upload) {
+                // Build the full path to the file
+                $filePath = public_path('doc_troubles/' . $upload->file_upload);
+                
+                // Check if the file exists and delete it
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+    
+                // Delete the record from the database
+                $upload->delete();
+            }
+
+            return redirect()->route('tickets.update-ticket', $id)->with('success', 'Document deleted successfully');
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function updateStatus($id, Request $request)
     {
         try {
             $ticket = Ticket::find($id);
-            $ticket->update([
-                'status' => 'close',
-                'closed_by' => auth()->user()->id
-            ]);
+            $ticket->status = 'close';
+            $ticket->closed_by = $request->closed_by;
+            $ticket->save();
 
             return redirect()->route('tickets.index')->with('success', 'Status updated successfully');
         } catch (\Throwable $th) {

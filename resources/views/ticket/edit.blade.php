@@ -81,9 +81,84 @@
             </form>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" id="uploadDocument" style="float: right">Upload File</button>
+                    </div>
+                </div>
+                @include('components.form-message')
+
+                <div class="table-responsive">
+                    <table id="example3" class="display">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Document</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ticket->uploadDocTrouble as $doc)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$doc->file_upload}}</td>
+                                    <td>
+                                        <a href="{{asset('doc_troubles/'. $doc->file_upload)}}" target="__blank" class="btn btn-sm btn-success download-btn">Preview</a>
+                                        <form action="{{ route('tickets.delete-doc', [$ticket->id, $doc->file_upload]) }}" method="POST" style="display: inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Apa Anda yakin ingin menghapus dokumen ini?')" class="btn btn-sm btn-danger"><i
+                                                class="fa fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
 </div>
+@include('ticket.modal')
 @endsection
 
-@section('script')
+@push('script')
+<script>
+    $('#uploadDocument').click(function () {
+        $('#documentModal').modal('show');
+    });
 
-@endsection
+    function upload() {
+        var files = $('input[name="doc"]').prop('files'); // Ambil semua file yang dipilih
+        var formData = new FormData();
+        // Tambahkan semua file ke FormData
+        for (var i = 0; i < files.length; i++) {
+            formData.append('docs[]', files[i]); // Gunakan 'docs[]' agar array file diterima di server
+        }
+
+        // Tambahkan token CSRF ke FormData
+        formData.append('_token', '{{ csrf_token() }}');
+
+        $.ajax({
+            url: "{{ route('tickets.upload-doc-trouble', $ticket->id) }}",
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                console.log(response);
+                $('#documentModal').modal('hide');
+                location.reload();
+            }
+        });
+
+    
+    }
+
+</script>
+@endpush

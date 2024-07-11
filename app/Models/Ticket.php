@@ -33,4 +33,9 @@ class Ticket extends Model
     {
         return $this->hasMany(UploadDocTicket::class);
     }
+    
+    public function uploadDocTrouble()
+    {
+        return $this->hasMany(UploadDocTrouble::class);
+    }
 }

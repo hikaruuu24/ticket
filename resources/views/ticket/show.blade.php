@@ -83,6 +83,44 @@
     </div>
     <div class="col-md-6">
         <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title
+                ">Lampiran</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="example3" class="display">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Document</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($ticket->uploadDocTrouble as $doc)
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$doc->file_upload}}</td>
+                                <td>
+                                    <a href="{{asset('doc_troubles/'. $doc->file_upload)}}" target="__blank" class="btn btn-sm btn-success download-btn">Preview</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title
+                ">Dokumen Penyelesaian Tiket</h3>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="example3" class="display">
@@ -99,7 +137,7 @@
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$doc->file_upload}}</td>
                                 <td>
-                                    <a href="{{asset('docs/'. $doc->file_upload)}}" target="__blank" class="btn btn-sm btn-success download-btn">Download</a>
+                                    <a href="{{asset('docs/'. $doc->file_upload)}}" target="__blank" class="btn btn-sm btn-success download-btn">Preview</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -107,7 +145,6 @@
                     </table>
                 </div>
             </div>
-            </form>
         </div>
     </div>
 </div>

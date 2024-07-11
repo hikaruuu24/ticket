@@ -37,6 +37,8 @@ Route::middleware('auth:web')->group(function () {
     Route::get('update-ticket/{id}', [TicketController::class, 'updateTicket'])->name('tickets.update-ticket');
     Route::post('/tickets/{id}/upload', [TicketController::class, 'uploadDoc'])->name('tickets.upload-doc');
     Route::delete('/tickets/{id}/delete-doc/{doc}', [TicketController::class, 'deleteDoc'])->name('tickets.delete-doc');
+    Route::post('/tickets/{id}/uploadDocTrouble', [TicketController::class, 'uploadDocTrouble'])->name('tickets.upload-doc-trouble');
+    Route::delete('/tickets/{id}/delete-doc-trouble/{doc}', [TicketController::class, 'deleteDocTrouble'])->name('tickets.delete-doc-trouble');
     Route::patch('/tickets/{id}/update-status', [TicketController::class, 'updateStatus'])->name('tickets.update-status');
     // Users
     Route::patch('change-password', [UserController::class, 'changePassword'])->name('users.change-password');

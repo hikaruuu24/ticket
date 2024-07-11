@@ -155,6 +155,11 @@ $(document).ready(function(){
             }
         });
     }
+
+    document.getElementById('submit-link').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default action of the link
+            document.getElementById('my-form').submit(); // Submit the form
+        });
 </script>
 
 @stack('script')
