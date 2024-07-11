@@ -67,7 +67,7 @@
                                                     @method('DELETE')
                                                     <button type="submit" onclick="return confirm('Apa Anda yakin ingin menghapus tiket ini?')" class="dropdown-item">Delete</button>
                                                 </form>
-                                                @if ($ticket->status != 'close')
+                                                @if ($ticket->status != 'close' && Auth::user()->role != 'HRD')
                                                     <a href="{{ route('tickets.update-ticket', $ticket->id) }}" class="dropdown-item">Submit</a>
                                                 @endif
                                             </div>
