@@ -93,7 +93,7 @@
 
                 <div class="card-footer" style="border-radius:0px 0px 10px 10px;">
                     <button type="submit" class="btn btn-success btn-footer">Save</button>
-                    <a href="{{ route('vacancies.index') }}" class="btn btn-secondary btn-footer">Back</a>
+                    <a href="{{ route('users.index') }}" class="btn btn-secondary btn-footer">Back</a>
                 </div>
             </form>
         </div>
