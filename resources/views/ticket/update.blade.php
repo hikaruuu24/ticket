@@ -38,7 +38,7 @@
                     <div class="form-group mb-3">
                         <label for="user_id">Nama Pembuat Ticket <small>(readonly)</small></label>
                         <input type="user_id" readonly class="form-control @error('user_id') is-invalid @enderror"
-                            id="user_id" name="user_id" value="{{auth()->user()->name}}" placeholder="Masukan user_id">
+                            id="user_id" name="user_id" value="{{$ticket->closed_by($ticket->id)}}" placeholder="Masukan user_id">
                         @error('user_id')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
