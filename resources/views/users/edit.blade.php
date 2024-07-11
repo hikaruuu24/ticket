@@ -78,7 +78,7 @@
 
                             <div class="form-group mb-3">
                                 <label for="avatar">Avatar :</label>
-                                <img src="{{ asset('ui/images/profile/'.(auth()->user()->avatar ?? 'user.png')) }}" width="110px"
+                                <img src="{{ asset('ui/images/profile/'.($user->avatar ?? 'user.png')) }}" width="110px"
                                     class="image img" />
 
                                 <div class="input-group mt-3">
