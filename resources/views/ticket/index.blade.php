@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@push('css')
+<style>
+    .text-blue {
+        color: #71afde;
+    }
+</style>
+    @endpush
+
 @section('content')
     <div class="row mt-4">
         <div class="col-12">
@@ -48,7 +56,7 @@
                                         @if ($ticket->status == 'open')
                                             <i class="fa fa-circle text-success me-1"></i>Open
                                         @elseif ($ticket->status == 'progress')
-                                            <i class="fa fa-circle text-primary me-1"></i>Progress by {{$ticket->findUser($ticket->progress_by)}}
+                                            <i class="fa fa-circle text-blue me-1   "></i>Progress by {{$ticket->findUser($ticket->progress_by)}}
                                         @elseif ($ticket->status == 'pending')
                                             <i class="fa fa-circle text-warning me-1"></i>Pending
                                         @else
