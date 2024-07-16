@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="user_id">Nama Pembuat Ticket</label>
-                        <input type="user_id" readonly class="form-control @error('user_id') is-invalid @enderror" id="user_id" name="user_id" value="{{auth()->user()->name}}"  placeholder="Masukan user_id">
+                        <input type="user_id" readonly class="form-control @error('user_id') is-invalid @enderror" id="user_id" name="user_id" value="{{auth()->user()->id}}"  placeholder="Masukan user_id">
                         @error('user_id')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

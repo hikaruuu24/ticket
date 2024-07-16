@@ -72,9 +72,8 @@
                 <div class="col-xl-6 col-lg-6">
 					<div class="pages-left ">
 						<div class="login-content">
-							<img src="{{asset('ui/images/ticket.png')}}" alt="" >
+							<img src="{{asset('ui/images/login-godrej.png')}}" alt="" >
 
-							{{-- <p>Your true value is determined by how much more you give in value than you take in payment. ...</p> --}}
 						</div>
 					</div>
                 </div>
