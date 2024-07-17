@@ -60,7 +60,6 @@
                         <label for="status">Status</label>
                         <select name="status" class="form-control @error('status') is-invalid @enderror" id="">
                             <option value="open" {{($ticket->status == 'open') ? 'selected' : ''}}>Open</option>
-                            <option value="pending" {{($ticket->status == 'pending') ? 'selected' : ''}}>Pending</option>
                             @if (auth()->user()->getRoleNames()[0] == 'Admin')
                                 <option value="close" {{($ticket->status == 'close') ? 'selected' : ''}}>Closed</option>
                             @endif

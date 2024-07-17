@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\NotificationMailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +45,6 @@ Route::middleware('auth:web')->group(function () {
     Route::patch('change-password', [UserController::class, 'changePassword'])->name('users.change-password');
     Route::resource('users', UserController::class);
     // History Log
-    
+    Route::resource('notification-mails', NotificationMailController::class);
 
 });

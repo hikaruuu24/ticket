@@ -28,12 +28,25 @@
                 </div>
             </li>
             <li>
+                <a href="https://www.gcpi-ais.com" target="__blank">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="nav-text">Home</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('tickets.index') }}">
                     <i class="fa-solid fa-headset"></i>
                     <span class="nav-text">Support</span>
                 </a>
             </li>
-            
+            @if (auth()->user()->getRoleNames()[0] == 'Admin')
+            <li>
+                <a href="{{ route('notification-mails.index') }}">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span class="nav-text">Mail Notification</span>
+                </a>
+            </li>
+            @endif
             @if (auth()->user()->getRoleNames()[0] == 'Admin')
             <li>
                 <a href="{{ route('users.index') }}">
@@ -43,7 +56,7 @@
             </li>
             @endif
             @if (auth()->user()->getRoleNames()[0] == 'Admin')
-            <li>
+            <li class="d-none">
                 <a href="{{ route('departements.index') }}">
                     <i class="fa-solid fa-building"></i>
                     <span class="nav-text">Department</span>

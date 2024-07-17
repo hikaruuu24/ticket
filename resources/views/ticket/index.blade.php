@@ -54,13 +54,11 @@
                                     </td> --}}
                                     <td>
                                         @if ($ticket->status == 'open')
-                                            <i class="fa fa-circle text-success me-1"></i>Open
+                                            <i class="fa fa-circle text-danger me-1"></i>Open
                                         @elseif ($ticket->status == 'progress')
-                                            <i class="fa fa-circle text-blue me-1   "></i>Progress by {{$ticket->findUser($ticket->progress_by)}}
-                                        @elseif ($ticket->status == 'pending')
-                                            <i class="fa fa-circle text-warning me-1"></i>Pending
+                                            <i class="fa fa-circle text-blue me-1"></i>Progress by {{$ticket->findUser($ticket->progress_by)}}
                                         @else
-                                            <i class="fa fa-circle text-danger me-1"></i>Closed by {{$ticket->findUser($ticket->closed_by)}}
+                                            <i class="fa fa-circle text-success me-1"></i>Closed by {{$ticket->findUser($ticket->closed_by)}}
                                         @endif
                                     </td>
                                     <td>{{$ticket->updated_at}}</td>

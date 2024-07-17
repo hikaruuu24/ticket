@@ -63,7 +63,6 @@
                         <label for="status">Status</label>
                         <select name="status" class="form-control @error('status') is-invalid @enderror" id="">
                             <option value="open">Open</option>
-                            <option value="pending">Pending</option>
                             @if (auth()->user()->getRoleNames()[0] == 'Admin')
                                 <option value="close">Closed</option>
                             @endif

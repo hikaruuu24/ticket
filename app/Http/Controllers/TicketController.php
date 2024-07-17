@@ -8,6 +8,9 @@ use App\Models\UploadDocTrouble;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use App\Mail\TicketAddedMail;
+use App\Models\NotificationMail;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
@@ -74,12 +77,18 @@ class TicketController extends Controller
 
             }
 
+            $lastTicket = Ticket::orderBy('created_at', 'desc')->first();
+            $getMails = NotificationMail::all();
+            foreach ($getMails as $mail) {
+                Mail::to($mail->email)->send(new TicketAddedMail($lastTicket));
+            }
+
             DB::commit(); 
 
             return redirect()->route('tickets.index')->with('success', 'Tiket berhasil dibuat');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->route('tickets.index')->with('error', 'Tiket gagal dibuat');
+            return redirect()->route('tickets.index')->with('failed', $th->getMessage());
         }
     }
 
